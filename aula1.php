@@ -17,3 +17,17 @@ echo $musicas->getSize() . PHP_EOL;
 $tocador = new TocadorDeMusica();
 $tocador->adicionarMusicas($musicas);
 $tocador->tocarMusica();
+
+$tocador->adicionarMusica("Havana");
+
+$tocador->avancarMusica();
+$tocador->tocarMusica();
+
+
+$tocador->adicionarMusicaNoComecoDaPlaylist('Havana Comeco');
+$tocador->removerMusicaNoComecoDaPlaylist();
+$tocador->removerMusicaDoFinalDaPlaylist();
+
+$tocador->exibirMusicas();
+
+$tocador->exibirQuantidadeDeMusicas();

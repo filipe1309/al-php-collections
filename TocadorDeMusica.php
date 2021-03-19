@@ -3,11 +3,13 @@
 class TocadorDeMusica
 {
     private $musicas;
+    private $historico;
 
     public function __construct()
     {
         $this->musicas = new SplDoublyLinkedList();
         $this->musicas->rewind();
+        $this->historico = new SplStack();
     }
 
     public function adicionarMusicas(SplFixedArray $musicas)
@@ -47,6 +49,12 @@ class TocadorDeMusica
         }
 
         echo 'Tocando musica: ' . $this->musicas->current() . PHP_EOL;
+        $this->historico->push($this->musicas->current());
+    }
+
+    public function tocarUltimaMusicaTocada()
+    {
+        echo 'Tocando musica do histórico: ' . $this->historico->pop() . PHP_EOL;
     }
 
     public function avancarMusica()

@@ -5,6 +5,7 @@ class TocadorDeMusica
     private $musicas;
     private $historico;
     private $filaDeDownloads;
+    private $ranking;
 
     public function __construct()
     {
@@ -12,6 +13,7 @@ class TocadorDeMusica
         $this->musicas->rewind();
         $this->historico = new SplStack(); // LIFO
         $this->filaDeDownloads = new SplQueue(); // FIFO
+        $this->ranking = new Ranking();
     }
 
     public function adicionarMusicas(SplFixedArray $musicas)
@@ -50,8 +52,8 @@ class TocadorDeMusica
             return;
         }
 
-        echo 'Tocando musica: ' . $this->musicas->current() . PHP_EOL;
         $this->historico->push($this->musicas->current());
+        $this->musicas->current()->tocar();
     }
 
     public function tocarUltimaMusicaTocada()
@@ -107,5 +109,22 @@ class TocadorDeMusica
         }
 
         $this->musicas->rewind();
+    }
+
+    public function exibeRanking()
+    {
+        if (!$this->musicas->count()) {
+            echo 'Erro, nenhuma musica no tocador' . PHP_EOL;
+            return;
+        }
+
+        foreach ($this->musicas as $musica) {
+            $this->ranking->insert($musica);
+        }
+
+
+        foreach ($this->ranking as $musica) {
+            echo $musica->getNome() . ' - ' . $musica->getVezesTocada() . PHP_EOL;
+        }
     }
 }

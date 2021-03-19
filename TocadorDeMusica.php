@@ -4,12 +4,14 @@ class TocadorDeMusica
 {
     private $musicas;
     private $historico;
+    private $filaDeDownloads;
 
     public function __construct()
     {
         $this->musicas = new SplDoublyLinkedList();
         $this->musicas->rewind();
-        $this->historico = new SplStack();
+        $this->historico = new SplStack(); // LIFO
+        $this->filaDeDownloads = new SplQueue(); // FIFO
     }
 
     public function adicionarMusicas(SplFixedArray $musicas)
@@ -87,5 +89,23 @@ class TocadorDeMusica
     public function exibirQuantidadeDeMusicas()
     {
         echo 'Existe ' . $this->musicas->count() . ' musicas no tocador' . PHP_EOL;
+    }
+
+    public function baixarMusicas()
+    {
+        if (!$this->musicas->count()) {
+            echo 'Erro, nenhuma musica no tocador' . PHP_EOL;
+            return;
+        }
+
+        for ($this->musicas->rewind(); $this->musicas->valid(); $this->musicas->next()) {
+            $this->filaDeDownloads->push($this->musicas->current());
+        }
+
+        for ($this->filaDeDownloads->rewind(); $this->filaDeDownloads->valid(); $this->filaDeDownloads->next()) {
+            echo 'Baixando: ' . $this->filaDeDownloads->current() . PHP_EOL;
+        }
+
+        $this->musicas->rewind();
     }
 }
